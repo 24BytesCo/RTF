@@ -1,0 +1,253 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "RTF | Report Technical Failures",
+        "description": "RTF| Report Technical Failures: RTF is a software to report and manage the entire process of a technical failure of one or many pieces of equipment. ",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/api"
+        }
+    ],
+    "tags": [
+        {
+            "name": "usuario",
+            "description": "Operaciones del usuario"
+        }
+    ],
+    "paths": {
+        "/usuario": {
+            "post": {
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Crea un usuario",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/usuario"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado corréctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/usuarioCreadoCorrectamente"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
+            }
+        },
+        "/autenticacion/login": {
+            "post": {
+                "tags": [
+                    "login"
+                ],
+                "summary": "Ingresa a la Aplicación",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ingreso satisfactorio",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/loginSatisfactorio"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "Unauthorized": {
+                "description": "(Unauthorized) no tiene autorización para llamar el servicio"
+            },
+            "NotFound": {
+                "description": "(NotFound) no se encontró la información"
+            },
+            "BadRequest": {
+                "description": "(BadRequest) los datos enviados son incorrectos o hay datos obligatorios no enviados"
+            },
+            "ServerError": {
+                "description": "(ServerError) error en el servidor"
+            }
+        },
+        "schemas": {
+            "usuario": {
+                "type": "object",
+                "properties": {
+                    "usuario": {
+                        "type": "string"
+                    },
+                    "primerNombre": {
+                        "type": "string"
+                    },
+                    "segundoNombre": {
+                        "type": "string"
+                    },
+                    "primerApellido": {
+                        "type": "string"
+                    },
+                    "segundoApellido": {
+                        "type": "string"
+                    },
+                    "correoElectronico": {
+                        "type": "string",
+                        "example": "correo@dominio.com"
+                    },
+                    "numeroTelefono": {
+                        "type": "string"
+                    },
+                    "contrasenia": {
+                        "type": "string"
+                    },
+                    "usuarioActivo": {
+                        "type": "integer",
+                        "description": "User Status",
+                        "example": 1
+                    }
+                }
+            },
+            "login": {
+                "type": "object",
+                "properties": {
+                    "usuario": {
+                        "type": "string"
+                    },
+                    "contrasenia": {
+                        "type": "string"
+                    }
+                }
+            },
+            "usuarioCreadoCorrectamente": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "boolean"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "body": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "example": "V1StGXR8_Z5jdHi6B-myT"
+                            },
+                            "correoElectronico": {
+                                "type": "string",
+                                "example": "correo@dominio.com"
+                            },
+                            "usuario": {
+                                "type": "string"
+                            },
+                            "primerNombre": {
+                                "type": "string"
+                            },
+                            "segundoNombre": {
+                                "type": "string"
+                            },
+                            "primerApellido": {
+                                "type": "string"
+                            },
+                            "segundoApellido": {
+                                "type": "string"
+                            },
+                            "numeroTelefono": {
+                                "type": "string"
+                            },
+                            "contrasenia": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "loginSatisfactorio": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "boolean"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "body": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "string",
+                                "example": "V1StGXR8_Z5jdHi6B-myT"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "petstore_auth": {
+                "type": "oauth2",
+                "flows": {
+                    "implicit": {
+                        "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
+                        "scopes": {
+                            "write:pets": "modify pets in your account",
+                            "read:pets": "read your pets"
+                        }
+                    }
+                }
+            },
+            "api_key": {
+                "type": "apiKey",
+                "name": "api_key",
+                "in": "header"
+            }
+        }
+    }
+}

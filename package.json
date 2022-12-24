@@ -1,0 +1,24 @@
+{
+  "name": "trf-report-technical-failures",
+  "version": "1.0.0",
+  "description": "RTF| Report Technical Failures: RTF is a software to report and manage the entire process of a technical failure of one or many pieces of equipment.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon api/index.js"
+  },
+  "author": "2MC Soluciones Intergrales",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql": "^2.18.1",
+    "nanoid": "^3.0.0",
+    "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

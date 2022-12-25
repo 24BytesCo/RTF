@@ -15,7 +15,7 @@ async function get(tabla, id) {
   return datosBaseDatos.filter((item) => item.id == id)[0] || null;
 }
 
-async function upSert(tabla, data) {
+async function insert(tabla, data) {
   if (!baseDatos[tabla]) {
     baseDatos[tabla] = [];
   }
@@ -54,7 +54,7 @@ async function query(tabla, consulta, estado = false) {
 module.exports = {
   list,
   get,
-  upSert,
+  insert,
   remove,
   query,
 };

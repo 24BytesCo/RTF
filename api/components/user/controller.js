@@ -1,14 +1,16 @@
 //Para generar ids
 const { nanoid } = require("nanoid");
-const TABLE = "user";
+const TABLE = "usuario";
 const auth = require("../auth/");
 const {
   validacionesParametrosRtf,
   validandoExistencia,
 } = require("../../../utils/validaciones");
+const errorRtf = require("../../../utils/error");
 
 module.exports = function (inyectedStore) {
-  let store = inyectedStore || require("../../../store/bd-fake");
+  // let store = inyectedStore || require("../../../store/mysql");
+  let store = require("../../../store/mysql");
 
   //Función para consultar todos los registros de una tabla
   function list() {
@@ -21,7 +23,7 @@ module.exports = function (inyectedStore) {
   }
 
   //Funcíon para crear y editar
-  async function upSert(body) {
+  async function insert(body) {
     const user = {
       primerNombre: body.primerNombre || null,
       segundoNombre: body.segundoNombre || null,
@@ -30,6 +32,8 @@ module.exports = function (inyectedStore) {
       correoElectronico: body.correoElectronico || null,
       numeroTelefono: body.numeroTelefono || null,
       usuario: body.usuario || null,
+      tipoUsuario: body.tipoUsuario || null,
+      estado: 1,
     };
 
     //Validaciones
@@ -40,32 +44,43 @@ module.exports = function (inyectedStore) {
     }
 
     //validaciones
-    validacionesParametrosRtf(body, [
+    validacionesParametrosRtf(user, [
       "usuario",
       "contrasenia",
       "primerNombre",
       "primerApellido",
       "correoElectronico",
+      "tipoUsuario",
     ]);
 
     //Validando la no existencia de éstas propiedades en la BD
-    await validandoExistencia("user", { usuario: user.usuario });
-    await validandoExistencia("user", {
+    await validandoExistencia("usuario", { usuario: user.usuario });
+    await validandoExistencia("usuario", {
       correoElectronico: user.correoElectronico,
     });
+
+    //Validando tipo usuario
+    const tipoUsuarioBd = await store.get("tipoUsuario", user.tipoUsuario);
+
+    console.log("tipoUsuarioBd", tipoUsuarioBd);
+    if (!tipoUsuarioBd || tipoUsuarioBd.length == 0) {
+      throw new errorRtf("El Tipo de Usuario enviado es inválido", 400);
+    }
 
     //Creando registro en Autenticación
     if (body.contrasenia && body.usuario) {
       //Creando Autenticación
-      await auth.upSert({
+      await auth.insert({
         id: user.id,
         usuario: body.usuario,
         contrasenia: body.contrasenia,
+        estado: 1,
       });
     }
 
     //Creando Usuario
-    return await store.upSert(TABLE, user);
+    console.log("user enviado a crear", user);
+    return await store.insert(TABLE, user);
   }
 
   //Inactivando un usuario usuario
@@ -74,6 +89,6 @@ module.exports = function (inyectedStore) {
   return {
     list,
     get,
-    upSert,
+    insert,
   };
 };

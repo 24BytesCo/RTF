@@ -1,11 +1,11 @@
 const bcrypt = require("bcrypt");
-const TABLA = "auth";
-const TABLA_USUARIO = "user";
+const TABLA = "autenticacion";
+const TABLA_USUARIO = "usuario";
 const autenticacionJwt = require("../../../seguridad/index");
 const errorRtf = require("../../../utils/error");
 
 module.exports = function (inyectedStore) {
-  let store = inyectedStore || require("../../../store/bd-fake");
+  let store = inyectedStore || require("../../../store/mysql");
 
   //logeandonos en la app
   async function login(usuario, contrasenia) {
@@ -45,9 +45,10 @@ module.exports = function (inyectedStore) {
   }
 
   //Creando registro en tabla al crearse un nuevo Usuario
-  async function upSert(data) {
+  async function insert(data) {
     const authData = {
       id: data.id,
+      estado: data.estado,
     };
     if (data.usuario) {
       authData.usuario = data.usuario;
@@ -58,10 +59,10 @@ module.exports = function (inyectedStore) {
       authData.contrasenia = await bcrypt.hash(data.contrasenia, 12);
     }
 
-    return await store.upSert(TABLA, authData);
+    return await store.insert(TABLA, authData);
   }
   return {
-    upSert,
+    insert,
     login,
   };
 };

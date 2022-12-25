@@ -6,6 +6,9 @@ const swaggerUi = require("swagger-ui-express");
 const user = require("./components/user/network");
 const auth = require("./components/auth/network");
 const tipoUsuario = require("./components/tipoUsuario/network");
+const categoriaEquipo = require("./components/categoriaEquipo/network");
+const tipoEquipo = require("./components/tipoEquipo/network");
+
 const errores = require("../network/gestionErrores");
 
 const app = express();
@@ -23,6 +26,8 @@ app.use("/api/usuario", user);
 app.use("/api/autenticacion", auth);
 app.use("/api/autenticacion", auth);
 app.use("/api/tipo-usuario", tipoUsuario);
+app.use("/api/categoria-equipo", categoriaEquipo);
+app.use("/api/tipo-equipo", tipoEquipo);
 
 const swaggerDoc = require("./swagger.json");
 

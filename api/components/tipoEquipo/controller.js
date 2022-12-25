@@ -1,13 +1,9 @@
-const bcrypt = require("bcrypt");
 const { nanoid } = require("nanoid");
 
-const TABLA = "tipoUsuario";
-const TABLA_USUARIO = "usuario";
-const autenticacionJwt = require("../../../seguridad/index");
+const TABLA = "tipoEquipo";
 const errorRtf = require("../../../utils/error");
 const {
   validacionesParametrosRtf,
-  validandoExistencia,
   validandoExistenciaConEstado,
 } = require("../../../utils/validaciones");
 module.exports = function (inyectedStore) {
@@ -18,29 +14,34 @@ module.exports = function (inyectedStore) {
       throw new errorRtf("Debes enviar un Body", 400);
     }
 
-    const tipoUsuario = {
+    const tipoEquipo = {
       id: nanoid(),
       descripcion: body.descripcion,
       codigo: body.codigo,
       estado: 1,
     };
 
-    validacionesParametrosRtf(tipoUsuario, ["descripcion", "codigo"]);
-
-    //Validando la no existencia de éstas propiedades en la BD
-    await validandoExistenciaConEstado(TABLA, { codigo: tipoUsuario.codigo });
+    validacionesParametrosRtf(tipoEquipo, ["descripcion", "codigo"]);
     await validandoExistenciaConEstado(TABLA, {
-      descripcion: tipoUsuario.descripcion,
+      codigo: tipoEquipo.codigo,
     });
-    return await store.insert(TABLA, tipoUsuario);
-  }
+    await validandoExistenciaConEstado(TABLA, {
+      descripcion: tipoEquipo.descripcion,
+    });
 
+    return await store.insert(TABLA, tipoEquipo);
+  }
   async function getAll() {
     return await store.list(TABLA);
+  }
+  //Función para consultar un registro
+  function get(id) {
+    return store.get(TABLA, id);
   }
 
   return {
     insert,
     getAll,
+    get,
   };
 };

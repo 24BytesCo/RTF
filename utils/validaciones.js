@@ -1,5 +1,5 @@
 const errorRtf = require("./error");
-let store = require("../store/bd-fake");
+let store = require("../store/mysql");
 
 function validacionesParametrosRtf(body, arrayPropiedades) {
   for (let clave in body) {
@@ -14,7 +14,10 @@ function validacionesParametrosRtf(body, arrayPropiedades) {
 }
 
 async function validandoExistencia(tabla, propiedad) {
+  console.log("propiedad", propiedad);
   var dataAth = await store.query(tabla, propiedad);
+
+  console.log("dataAth", dataAth);
 
   var pro = "";
   for (let clave in propiedad) {
@@ -31,8 +34,8 @@ async function validandoExistencia(tabla, propiedad) {
 }
 
 async function validandoExistenciaConEstado(tabla, propiedad) {
-  var dataAth = await store.query(tabla, propiedad, true);
-
+  var dataAth = await store.queryActivo(tabla, propiedad);
+  console.log("dataAth", dataAth);
   var pro = "";
   for (let clave in propiedad) {
     pro = clave;

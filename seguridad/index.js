@@ -3,7 +3,6 @@ const config = require("../config");
 const errorRtf = require("../utils/error");
 
 const secreto = config.jwt.secreto;
-console.log("secreto creando", secreto);
 function ingreso(datos) {
   console.log("datos", datos);
   return jwt.sign(datos, secreto);

@@ -8,10 +8,19 @@ const {
 } = require("../../../utils/validaciones");
 const router = express.Router();
 
-router.post("/", upSert);
+router.post("/", insert);
+router.get("/", getAll);
 
-async function upSert(req, res, next) {
-  Controller.upSert(req.body)
+async function insert(req, res, next) {
+  Controller.insert(req.body)
+    .then((result) => {
+      response.success(req, res, result, 200);
+    })
+    .catch(next);
+}
+
+async function getAll(req, res, next) {
+  Controller.getAll()
     .then((result) => {
       response.success(req, res, result, 200);
     })

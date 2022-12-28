@@ -4,7 +4,6 @@ const errorRtf = require("../utils/error");
 
 const secreto = config.jwt.secreto;
 function ingreso(datos) {
-  console.log("datos", datos);
   return jwt.sign(datos, secreto);
 }
 
@@ -60,4 +59,5 @@ function decodificandoCabecera(req) {
 module.exports = {
   ingreso,
   validando,
+  decodificandoCabecera,
 };

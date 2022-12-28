@@ -3,7 +3,7 @@ const TABLA = "autenticacion";
 const TABLA_USUARIO = "usuario";
 const autenticacionJwt = require("../../../seguridad/index");
 const errorRtf = require("../../../utils/error");
-
+const { decodificandoCabecera } = require("../../../seguridad/index");
 module.exports = function (inyectedStore) {
   let store = inyectedStore || require("../../../store/mysql");
 
@@ -25,6 +25,7 @@ module.exports = function (inyectedStore) {
             id: dataAth.id,
           });
 
+          const fechaHoy = new Date();
           //Generar Token
           return autenticacionJwt.ingreso({
             usuario: dataUsuario.usuario,
@@ -34,6 +35,7 @@ module.exports = function (inyectedStore) {
             segundoNombre: dataUsuario.segundoNombre,
             primerApellido: dataUsuario.primerApellido,
             segundoApellido: dataUsuario.segundoApellido,
+            ex: fechaHoy.setHours(3),
           });
         } else {
           throw new errorRtf("Datos de logueo inválidos", 401);
@@ -42,6 +44,9 @@ module.exports = function (inyectedStore) {
       .catch((err) => {
         throw new errorRtf("Datos de logueo inválidos", 401);
       });
+  }
+  async function verificar(req) {
+    return decodificandoCabecera(req);
   }
 
   //Creando registro en tabla al crearse un nuevo Usuario
@@ -64,5 +69,6 @@ module.exports = function (inyectedStore) {
   return {
     insert,
     login,
+    verificar,
   };
 };

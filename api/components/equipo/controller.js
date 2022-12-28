@@ -1,9 +1,13 @@
+const bcrypt = require("bcrypt");
 const { nanoid } = require("nanoid");
 
-const TABLA = "tipoEquipo";
+const TABLA = "categoriaEquipo";
+const TABLA_USUARIO = "usuario";
+const autenticacionJwt = require("../../../seguridad/index");
 const errorRtf = require("../../../utils/error");
 const {
   validacionesParametrosRtf,
+  validandoExistencia,
   validandoExistenciaConEstado,
 } = require("../../../utils/validaciones");
 module.exports = function (inyectedStore) {
@@ -14,36 +18,22 @@ module.exports = function (inyectedStore) {
       throw new errorRtf("Debes enviar un Body", 400);
     }
 
-    const tipoEquipo = {
+    const categoriaEquipo = {
       id: nanoid(),
-      categoria: body.categoria,
-      nombre: body.nombre,
-      marca: body.marca,
-      noSerie: body.noSerie,
       descripcion: body.descripcion,
-      fechaAdquisicionEmpresa: body.fechaAdquisicionEmpresa,
-      modelo: body.modelo,
-      tipoEquipo: body.tipoEquipo,
       codigo: body.codigo,
       estado: 1,
     };
 
-    validacionesParametrosRtf(tipoEquipo, [
-      "categori",
-      "nombre",
-      "marca",
-      "noSerie",
-      "descripcion",
-      "modelo",
-      "tipoEquipo",
-      "codigo",
-    ]);
-
+    validacionesParametrosRtf(categoriaEquipo, ["descripcion", "codigo"]);
     await validandoExistenciaConEstado(TABLA, {
-      codigo: tipoEquipo.codigo,
+      codigo: categoriaEquipo.codigo,
+    });
+    await validandoExistenciaConEstado(TABLA, {
+      descripcion: categoriaEquipo.descripcion,
     });
 
-    return await store.insert(TABLA, tipoEquipo);
+    return await store.insert(TABLA, categoriaEquipo);
   }
   async function getAll() {
     return await store.list(TABLA);

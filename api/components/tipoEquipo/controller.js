@@ -46,7 +46,7 @@ module.exports = function (inyectedStore) {
     return await store.insert(TABLA, tipoEquipo);
   }
   async function getAll() {
-    return await store.list(TABLA);
+    return await store.listActivo(TABLA);
   }
   //Función para consultar un registro
   function get(id) {

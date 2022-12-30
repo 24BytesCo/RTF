@@ -54,6 +54,18 @@ function list(TABLA) {
   });
 }
 
+function listActivo(TABLA) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT *FROM ${TABLA} WHERE estado = 1`, (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
 function get(TABLA, id) {
   console.log("get", id);
   return new Promise((resolve, rejet) => {
@@ -133,4 +145,5 @@ module.exports = {
   update,
   query,
   queryActivo,
+  listActivo,
 };

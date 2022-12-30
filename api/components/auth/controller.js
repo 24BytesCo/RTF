@@ -1,11 +1,12 @@
 const bcrypt = require("bcrypt");
 const TABLA = "autenticacion";
 const TABLA_USUARIO = "usuario";
+const TABLA_TIPO_USUARIO = "tipoUsuario";
 const autenticacionJwt = require("../../../seguridad/index");
 const errorRtf = require("../../../utils/error");
 const { decodificandoCabecera } = require("../../../seguridad/index");
 module.exports = function (inyectedStore) {
-  let store = inyectedStore || require("../../../store/mysql");
+  let store = require("../../../store/mysql");
 
   //logeandonos en la app
   async function login(usuario, contrasenia) {
@@ -25,6 +26,12 @@ module.exports = function (inyectedStore) {
             id: dataAth.id,
           });
 
+          const codigoUsuario = await store.queryActivo(TABLA_TIPO_USUARIO, {
+            id: dataUsuario.tipoUsuario,
+          });
+
+          console.log("codigoUsuario", codigoUsuario);
+
           const fechaHoy = new Date();
           //Generar Token
           return autenticacionJwt.ingreso({
@@ -35,6 +42,7 @@ module.exports = function (inyectedStore) {
             segundoNombre: dataUsuario.segundoNombre,
             primerApellido: dataUsuario.primerApellido,
             segundoApellido: dataUsuario.segundoApellido,
+            tUsuario: codigoUsuario.codigo,
             ex: fechaHoy.setHours(3),
           });
         } else {

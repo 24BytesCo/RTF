@@ -8,6 +8,7 @@ const auth = require("./components/auth/network");
 const tipoUsuario = require("./components/tipoUsuario/network");
 const categoriaEquipo = require("./components/categoriaEquipo/network");
 const tipoEquipo = require("./components/tipoEquipo/network");
+const equipo = require("./components/equipo/network");
 
 const errores = require("../network/gestionErrores");
 
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 
 //Router
 app.use("/api/usuario", user);
-app.use("/api/autenticacion", auth);
+app.use("/api/equipo", equipo);
 app.use("/api/autenticacion", auth);
 app.use("/api/tipo-usuario", tipoUsuario);
 app.use("/api/categoria-equipo", categoriaEquipo);

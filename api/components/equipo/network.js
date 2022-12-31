@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post("/", insert);
 router.get("/", getAll);
+router.get("/principales", getAllPrincipalesActivos);
 router.get("/:id", getOne);
 
 async function insert(req, res, next) {
@@ -23,6 +24,14 @@ async function insert(req, res, next) {
 
 async function getAll(req, res, next) {
   Controller.getAll()
+    .then((result) => {
+      response.success(req, res, result, 200);
+    })
+    .catch(next);
+}
+
+async function getAllPrincipalesActivos(req, res, next) {
+  Controller.getAllPrincipalesActivos()
     .then((result) => {
       response.success(req, res, result, 200);
     })

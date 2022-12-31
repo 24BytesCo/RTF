@@ -65,7 +65,17 @@ function listActivo(TABLA) {
     });
   });
 }
-
+function listEquiposActivosTipo(TABLA, tipoEquipo) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT *FROM ${TABLA} WHERE estado = 1 and tipoEquipo="${tipoEquipo}"`, (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 function get(TABLA, id) {
   console.log("get", id);
   return new Promise((resolve, rejet) => {
@@ -146,4 +156,5 @@ module.exports = {
   query,
   queryActivo,
   listActivo,
+  listEquiposActivosTipo
 };

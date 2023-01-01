@@ -7,12 +7,16 @@ const seguridad = require("./secure");
 const router = express.Router();
 
 //Rutas
-router.get("/", getAll);
+router.get("/",  getAll);
 router.get("/:id", getOne);
-router.post("/", insert);
-router.put("/", seguridad("update-usuario"), insert);
+router.post("/",  insert);
+router.put("/",  seguridad("update-usuario"), insert);
 
 //Funciones
+
+function validar() {
+  console.log("validando");
+}
 
 //Obtener todos los registros de usuarios
 function getAll(req, res, next) {

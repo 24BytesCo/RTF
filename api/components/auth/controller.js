@@ -33,6 +33,12 @@ module.exports = function (inyectedStore) {
           console.log("codigoUsuario", codigoUsuario);
 
           const fechaHoy = new Date();
+          function addHoursToDate(objDate, intHours) {
+            var numberOfMlSeconds = objDate.getTime();
+            var addMlSeconds = (intHours ) * 60000;
+            var newDateObj = new Date(numberOfMlSeconds + addMlSeconds);
+            return newDateObj;
+        }
           //Generar Token
           return autenticacionJwt.ingreso({
             usuario: dataUsuario.usuario,
@@ -43,7 +49,7 @@ module.exports = function (inyectedStore) {
             primerApellido: dataUsuario.primerApellido,
             segundoApellido: dataUsuario.segundoApellido,
             tUsuario: codigoUsuario.codigo,
-            ex: fechaHoy.setHours(3),
+            ex: addHoursToDate(new Date(), 180),
           });
         } else {
           throw new errorRtf("Datos de logueo inválidos", 401);

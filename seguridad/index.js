@@ -3,6 +3,7 @@ const config = require("../config");
 const errorRtf = require("../utils/error");
 
 const secreto = config.jwt.secreto;
+
 function ingreso(datos) {
   return jwt.sign(datos, secreto);
 }
@@ -56,8 +57,34 @@ function decodificandoCabecera(req) {
   return (req.user = tokenValido);
 }
 
+function verificandoPermisos(action) {
+  function middleware(req, res, next) {
+    const usuarioLogueado = req.body.id;
+    const horaActual = new Date();
+
+
+
+
+    switch (action) {
+      case "update-usuario":
+        validando.datosLogueado(req, usuarioLogueado);
+
+        next();
+
+        break;
+;
+
+      default:
+        next();
+    }
+  }
+
+  return middleware;
+};
+
 module.exports = {
   ingreso,
   validando,
   decodificandoCabecera,
+  verificandoPermisos
 };

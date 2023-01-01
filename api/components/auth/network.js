@@ -2,11 +2,11 @@ const express = require("express");
 
 const response = require("../../../network/response");
 const Controller = require("./index");
-
+const seguridad = require("../../../seguridad/index");
 const router = express.Router();
 
 router.post("/login", login);
-router.get("/verificar", verificar);
+router.get("/verificar", seguridad.verificandoPermisos(''), verificar);
 
 async function login(req, res) {
   Controller.login(req.body.usuario, req.body.contrasenia)

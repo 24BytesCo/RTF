@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/login", login);
 router.get("/verificar", seguridad.verificandoPermisos(''), verificar);
+router.get("/hora-servidor", seguridad.verificandoPermisos('ver-hora-server'), horaServidor);
 
 async function login(req, res) {
   Controller.login(req.body.usuario, req.body.contrasenia)
@@ -27,4 +28,9 @@ async function verificar(req, res) {
       response.error(req, res, "El token es inválido", 400);
     });
 }
+
+function horaServidor(req, res) {
+  response.success(req, res, new Date(), 200);
+}  
+
 module.exports = router;

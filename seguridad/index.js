@@ -72,7 +72,13 @@ function verificandoPermisos(action) {
         next();
 
         break;
-;
+      case "ver-hora-server":  
+      
+      decodificandoCabecera(req);
+
+      next();
+
+      break;
 
       default:
         next();

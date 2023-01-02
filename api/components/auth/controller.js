@@ -18,7 +18,7 @@ module.exports = function (inyectedStore) {
       throw new errorRtf("Datos de logueo inválidos", 401);
     }
     //Comparando contraseñas con seguridad
-    return bcrypt
+    return await bcrypt
       .compare(contrasenia, dataAth.contrasenia)
       .then(async (result) => {
         //Evaluando comparación positiva

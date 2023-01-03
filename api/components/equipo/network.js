@@ -23,7 +23,7 @@ async function insert(req, res, next) {
 }
 
 async function getAll(req, res, next) {
-  Controller.getAll()
+  await Controller.getAll()
     .then((result) => {
       response.success(req, res, result, 200);
     })
@@ -39,11 +39,11 @@ async function getAllPrincipalesActivos(req, res, next) {
 }
 
 //Obtener un registro de CATEGORIA EQUIPO
-function getOne(req, res, next) {
+async function getOne(req, res, next) {
   if (!req.params.id) {
     throw new errorRtf("Debes enviar un ID", 400);
   }
-  Controller.get(req.params.id)
+  await Controller.get(req.params.id)
     .then((user) => {
       response.success(req, res, user, 200);
     })

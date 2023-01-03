@@ -132,6 +132,19 @@ function query(TABLA, query) {
   });
 }
 
+function queryEquipoTipoEquipoInner(TABLA, tablaDos) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT *FROM ${TABLA} tb INNER JOIN tipoEquipo te on te.id = tb.tipoEquipo WHERE tb.estado = 1` , (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data || null);
+      }
+    });
+  });
+}
+
+
 function queryActivo(TABLA, query) {
   return new Promise((resolve, rejet) => {
     conectar.query(
@@ -154,6 +167,7 @@ module.exports = {
   insert,
   update,
   query,
+  queryEquipoTipoEquipoInner,
   queryActivo,
   listActivo,
   listEquiposActivosTipo

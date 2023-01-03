@@ -3,6 +3,7 @@ const { nanoid } = require("nanoid");
 
 const TABLA = "equipo";
 const TABLA_TIPO_EQUIPO = "tipoEquipo";
+const TABLA_CARTEGORIA_EQUIPO = "categoriaEquipo";
 const autenticacionJwt = require("../../../seguridad/index");
 const errorRtf = require("../../../utils/error");
 const {
@@ -46,7 +47,59 @@ module.exports = function (inyectedStore) {
     return await store.insert(TABLA, equipo);
   }
   async function getAll() {
-    return await store.list(TABLA);
+
+    let listaMapeada = [];
+    let general = await store.listActivo(TABLA);
+
+
+    async function hola(){
+      for (let i=0; i<general.length; i++) 
+      {
+        const item = general[i];
+        const tipoEquipo = await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo);
+        const categoria = await store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria);
+        const equipoPrincipal = await store.get(TABLA, item.equipoPrincipal) || null;
+        const equipo = 
+        {
+          id: item.id,
+          categoria:  
+          {
+            descripcion: categoria[0].descripcion,
+            codigo: categoria[0].codigo,
+          },  
+          nombre: item.nombre,
+          marca: item.marca,
+          noSerie: item.noSerie,
+          descripcion: item.descripcion,
+          fechaAdquisionEmpresa: item.fechaAdquisionEmpresa,
+          tipoEquipo:  
+          {
+            descripcion: tipoEquipo[0].descripcion,
+            codigo: tipoEquipo[0].codigo,
+          },
+          equipoPrincipal: 
+          {
+            id: equipoPrincipal[0]?.id?? null,
+            nombre: equipoPrincipal[0]?.nombre?? null ,
+            codigo: equipoPrincipal[0]?.codigo?? null,
+          },
+          imagenPrincipal: item.imagenPrincipal,
+          imagenArrayUrl: item.imagenArrayUrl,
+
+        }
+
+        console.log("equipo", equipo);
+
+        listaMapeada.push(equipo);
+        
+      }
+    }
+
+    await hola();
+
+    return listaMapeada;
+
+
   }
 
   async function getAllPrincipalesActivos() {
@@ -56,9 +109,10 @@ module.exports = function (inyectedStore) {
   }
 
   //Función para consultar un registro
-  function get(id) {
-    return store.get(TABLA, id);
+  async function get(id) {
+    return await store.get(TABLA, id);
   }
+
 
   return {
     insert,

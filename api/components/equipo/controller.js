@@ -49,8 +49,8 @@ module.exports = function (inyectedStore) {
   }
   async function getAll(req) {
 
-    const desde = Number(req.query.desde) || 0;
-    const hasta = Number(req.query.hasta) || 5;
+    const desde = Number(req.query.desdeRegistro) || 0;
+    const hasta = Number(req.query.cantidadPorPagina) || 5;
 
     let listaMapeada = [];
     let general = await store.listActivoPaginado(TABLA, desde, hasta);

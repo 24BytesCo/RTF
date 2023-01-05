@@ -11,6 +11,7 @@ const {
   validandoExistencia,
   validandoExistenciaConEstado,
 } = require("../../../utils/validaciones");
+const equipo = require(".");
 module.exports = function (inyectedStore) {
   let store = require("../../../store/mysql");
 
@@ -46,19 +47,23 @@ module.exports = function (inyectedStore) {
 
     return await store.insert(TABLA, equipo);
   }
-  async function getAll() {
+  async function getAll(req) {
+
+    const desde = Number(req.query.desde) || 0;
+    const hasta = Number(req.query.hasta) || 5;
 
     let listaMapeada = [];
-    let general = await store.listActivo(TABLA);
+    let general = await store.listActivoPaginado(TABLA, desde, hasta);
 
 
-    async function hola(){
+    async function mapeoManual(){
       for (let i=0; i<general.length; i++) 
       {
         const item = general[i];
-        const tipoEquipo = await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo);
-        const categoria = await store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria);
-        const equipoPrincipal = await store.get(TABLA, item.equipoPrincipal) || null;
+
+        const [ tipoEquipo, categoria, equipoPrincipal ] =await Promise.all([await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo), store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria),  await store.get(TABLA, item.equipoPrincipal) || null]);
+
+
         const equipo = 
         {
           id: item.id,
@@ -89,14 +94,13 @@ module.exports = function (inyectedStore) {
 
         }
 
-        console.log("equipo", equipo);
 
         listaMapeada.push(equipo);
         
       }
     }
 
-    await hola();
+    await mapeoManual();
 
     return listaMapeada;
 
@@ -107,6 +111,11 @@ module.exports = function (inyectedStore) {
     //Consultando el id del tipo equipo Principal
     const tipoEquipo = await store.queryActivo(TABLA_TIPO_EQUIPO, { codigo: 'PRIN'});
     return await store.listEquiposActivosTipo(TABLA, tipoEquipo.id);
+  }
+
+  async function getAllConteoTotalActivos() {
+    //Consultando el id del tipo equipo Principal
+    return await store.queryConteoActivo(TABLA);
   }
 
   //Función para consultar un registro
@@ -120,5 +129,6 @@ module.exports = function (inyectedStore) {
     getAll,
     getAllPrincipalesActivos,
     get,
+    getAllConteoTotalActivos
   };
 };

@@ -20,7 +20,6 @@ async function insert(tabla, data) {
     baseDatos[tabla] = [];
   }
 
-  console.log("baseDatos[tabla]", baseDatos[tabla]);
   baseDatos[tabla].push(data);
 
   return await get(tabla, data.id);
@@ -33,7 +32,6 @@ async function remove(tabla, id) {
 async function query(tabla, consulta, estado = false) {
   let datosBaseDatos = await list(tabla);
 
-  console.log("datosBaseDatos", datosBaseDatos);
   let llaves = Object.keys(consulta);
   let llave = llaves[0];
 

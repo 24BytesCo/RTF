@@ -14,10 +14,6 @@ router.put("/",  seguridad("update-usuario"), insert);
 
 //Funciones
 
-function validar() {
-  console.log("validando");
-}
-
 //Obtener todos los registros de usuarios
 function getAll(req, res, next) {
   Controller.list()

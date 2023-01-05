@@ -62,7 +62,6 @@ module.exports = function (inyectedStore) {
     //Validando tipo usuario
     const tipoUsuarioBd = await store.get("tipoUsuario", user.tipoUsuario);
 
-    console.log("tipoUsuarioBd", tipoUsuarioBd);
     if (!tipoUsuarioBd || tipoUsuarioBd.length == 0) {
       throw new errorRtf("El Tipo de Usuario enviado es inválido", 400);
     }
@@ -79,7 +78,6 @@ module.exports = function (inyectedStore) {
     }
 
     //Creando Usuario
-    console.log("user enviado a crear", user);
     return await store.insert(TABLE, user);
   }
 

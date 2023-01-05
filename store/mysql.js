@@ -65,6 +65,18 @@ function listActivo(TABLA) {
     });
   });
 }
+
+function listActivoPaginado(TABLA, desde,hasta) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT  *FROM ${TABLA} WHERE estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 function listEquiposActivosTipo(TABLA, tipoEquipo) {
   return new Promise((resolve, rejet) => {
     conectar.query(`SELECT *FROM ${TABLA} WHERE estado = 1 and tipoEquipo="${tipoEquipo}"`, (error, data) => {
@@ -77,7 +89,6 @@ function listEquiposActivosTipo(TABLA, tipoEquipo) {
   });
 }
 function get(TABLA, id) {
-  console.log("get", id);
   return new Promise((resolve, rejet) => {
     conectar.query(
       `SELECT *FROM ${TABLA} WHERE id = "${id}"`,
@@ -161,6 +172,22 @@ function queryActivo(TABLA, query) {
   });
 }
 
+function queryConteoActivo(TABLA) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `SELECT COUNT(id) FROM ${TABLA} WHERE  estado = 1`,
+      
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data[0] || null);
+        }
+      }
+    );
+  });
+}
+
 module.exports = {
   list,
   get,
@@ -170,5 +197,7 @@ module.exports = {
   queryEquipoTipoEquipoInner,
   queryActivo,
   listActivo,
-  listEquiposActivosTipo
+  listEquiposActivosTipo,
+  listActivoPaginado,
+  queryConteoActivo
 };

@@ -12,7 +12,6 @@ module.exports = function (inyectedStore) {
   async function login(usuario, contrasenia) {
     const dataAth = await store.query(TABLA, { usuario: usuario });
 
-    console.log("dataAth", dataAth);
 
     if (!dataAth) {
       throw new errorRtf("Datos de logueo inválidos", 401);
@@ -32,7 +31,6 @@ module.exports = function (inyectedStore) {
             id: dataUsuario.tipoUsuario,
           });
 
-          console.log("codigoUsuario", codigoUsuario);
 
           const fechaHoy = new Date();
           function addHoursToDate(objDate, intHours) {
@@ -54,7 +52,6 @@ module.exports = function (inyectedStore) {
             ex: addHoursToDate(new Date(), 180),
           });
         } else {
-          console.log("result", result);
           throw new errorRtf("Datos de logueo inválidos", 401);
         }
       })

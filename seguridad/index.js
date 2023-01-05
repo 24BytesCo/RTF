@@ -21,7 +21,6 @@ const validando = {
 
 function obtenerToken(autorizacion) {
   //Bearer werwert23rdsarfwefasdf23rs
-  console.log("autorizacion", autorizacion);
   if (!autorizacion) {
     throw new errorRtf(
       "Ha ocurrido un problema con la autorización | NT01",
@@ -73,6 +72,12 @@ function verificandoPermisos(action) {
 
         break;
       case "ver-hora-server":  
+      
+      decodificandoCabecera(req);
+
+      next();
+
+      case "verificar-token":  
       
       decodificandoCabecera(req);
 

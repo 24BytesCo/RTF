@@ -85,6 +85,7 @@ module.exports = function (inyectedStore) {
           },
           imagenPrincipal: item.imagenPrincipal,
           imagenArrayUrl: item.imagenArrayUrl,
+          codigo: item.codigo
 
         }
 

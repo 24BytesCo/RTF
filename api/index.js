@@ -25,16 +25,19 @@ app.use(bodyParser.text({ type: "text/html" }));
 
 //Habilitando cors
 //CORS middleware
-var allowCrossDomain = function(req, res, next) {
+app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
 
-  next();
-}
+  if (req.method == 'OPTIONS') {
+      res.send(200);
+  } else {
+      next();
+  }
+});
 // app.use(cors())
 // app.options('*', cors({credentials: true, origin: true}));
-app.use(allowCrossDomain);
 //Router
 app.use("/api/usuario", user);
 app.use("/api/equipo", equipo);

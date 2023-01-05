@@ -25,7 +25,7 @@ app.use(bodyParser.text({ type: "text/html" }));
 
 //Habilitando cors
 app.use(cors())
-app.options('*', cors());
+app.options('*', cors({credentials: true, origin: true}));
 //Router
 app.use("/api/usuario", user);
 app.use("/api/equipo", equipo);

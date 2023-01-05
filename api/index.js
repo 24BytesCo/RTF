@@ -24,8 +24,17 @@ app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
 app.use(bodyParser.text({ type: "text/html" }));
 
 //Habilitando cors
-app.use(cors())
-app.options('*', cors({credentials: true, origin: true}));
+//CORS middleware
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'example.com');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+  next();
+}
+// app.use(cors())
+// app.options('*', cors({credentials: true, origin: true}));
+app.use(allowCrossDomain);
 //Router
 app.use("/api/usuario", user);
 app.use("/api/equipo", equipo);

@@ -74,8 +74,8 @@ module.exports = function (inyectedStore) {
           fechaAdquisionEmpresa: item.fechaAdquisionEmpresa,
           tipoEquipo:  
           {
-            descripcion: tipoEquipo[0].descripcion,
-            codigo: tipoEquipo[0].codigo,
+            descripcion: tipoEquipo[0]?.descripcion?? null,
+            codigo: tipoEquipo[0]?.codigo?? null,
           },
           equipoPrincipal: 
           {

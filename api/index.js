@@ -26,7 +26,7 @@ app.use(bodyParser.text({ type: "text/html" }));
 //Habilitando cors
 //CORS middleware
 var allowCrossDomain = function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'https://rtf.techno-services.com.co');
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
 

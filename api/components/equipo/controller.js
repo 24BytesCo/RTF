@@ -72,7 +72,7 @@ module.exports = function (inyectedStore) {
     } else {
       general = await store.listActivoPaginado(TABLA, desde, hasta);
     }
-    async function mapeoManual() {
+    async function mapeoManualRow() {
 
 
         for (let i = 0; i < general.length; i++) {
@@ -117,8 +117,57 @@ module.exports = function (inyectedStore) {
         
       }
     }
+    async function mapeoManual() {
 
+
+      for (let i = 0; i < general.length; i++) {
+        var item =  general[i];
+
+        const [tipoEquipo, categoria, equipoPrincipal] = await Promise.all([
+          await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo),
+          store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria),
+          (await store.get(TABLA, item.equipoPrincipal)) || null,
+        ]);
+
+        
+
+        const equipo = {
+          id: item.id,
+          categoria: {
+            descripcion: categoria[0]?.descripcion ?? null,
+            codigo: categoria[0]?.codigo ?? null,
+          },
+          nombre: item.nombre,
+          marca: item.marca,
+          noSerie: item.noSerie,
+          descripcion: item.descripcion,
+          fechaAdquisionEmpresa: item.fechaAdquisionEmpresa,
+          tipoEquipo: {
+            descripcion: tipoEquipo[0]?.descripcion ?? null,
+            codigo: tipoEquipo[0]?.codigo ?? null,
+          },
+          equipoPrincipal: {
+            id: equipoPrincipal[0]?.id ?? null,
+            nombre: equipoPrincipal[0]?.nombre ?? null,
+            codigo: equipoPrincipal[0]?.codigo ?? null,
+          },
+          imagenPrincipal: item.imagenPrincipal,
+          imagenArrayUrl: item.imagenArrayUrl,
+          codigo: item.codigo,
+        };
+
+        listaMapeada.push(equipo);
+      
+    }
+  }
+
+  if (nombre && nombre != "null") {
+    await mapeoManualRow();
+    
+  }else{
     await mapeoManual();
+
+  }
 
     return listaMapeada;
   }

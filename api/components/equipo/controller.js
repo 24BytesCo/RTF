@@ -53,33 +53,31 @@ module.exports = function (inyectedStore) {
     const nombre = req.query.nombre;
 
     let listaMapeada = [];
-    let general = null;
 
     if (nombre && nombre != "null") {
-      general = await store.listActivoPaginadoNombreLike(
-        TABLA,
-        nombre,
-        0,
-        hasta
-      );
 
-      let genDos = await store.listActivoPaginadoMarcaLike(
+     var [general, genDos, genTres] =  await Promise.all([await store.listActivoPaginadoNombreLike(
         TABLA,
         nombre,
         0,
         hasta
-      );
+      ), await store.listActivoPaginadoMarcaLike(
+        TABLA,
+        nombre,
+        0,
+        hasta
+      ), await store.listActivoPaginadoCodigoLike(
+        TABLA,
+        nombre,
+        0,
+        hasta
+      ) ]);
+
       for (let index = 0; index < genDos.length; index++) {
         const element = genDos[index];
         general.push(element);
       }
 
-      let genTres = await store.listActivoPaginadoCodigoLike(
-        TABLA,
-        nombre,
-        0,
-        hasta
-      );
 
       for (let index = 0; index < genTres.length; index++) {
         const element = genTres[index];

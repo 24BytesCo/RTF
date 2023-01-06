@@ -80,11 +80,15 @@ module.exports = function (inyectedStore) {
           item = Object.values(JSON.parse(JSON.stringify(item)));
           item = item[i];
 
+          console.log("item", item);
           const [tipoEquipo, categoria, equipoPrincipal] = await Promise.all([
             await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo),
             store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria),
             (await store.get(TABLA, item.equipoPrincipal)) || null,
           ]);
+          console.log("tipoEquipo", tipoEquipo);
+          console.log("categoria", categoria);
+          console.log("equipoPrincipal", equipoPrincipal);
 
           
 
@@ -161,6 +165,9 @@ module.exports = function (inyectedStore) {
     }
   }
 
+  if (general.length == 0) {
+    return [];
+  }
   if (nombre && nombre != "null") {
     await mapeoManualRow();
     

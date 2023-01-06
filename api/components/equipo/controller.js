@@ -59,14 +59,14 @@ module.exports = function (inyectedStore) {
       general = await store.listActivoPaginadoNombreLike(
         TABLA,
         nombre,
-        desde,
+        0,
         hasta
       );
 
       let genDos = await store.listActivoPaginadoMarcaLike(
         TABLA,
         nombre,
-        desde,
+        0,
         hasta
       );
       for (let index = 0; index < genDos.length; index++) {
@@ -77,7 +77,7 @@ module.exports = function (inyectedStore) {
       let genTres = await store.listActivoPaginadoCodigoLike(
         TABLA,
         nombre,
-        desde,
+        0,
         hasta
       );
 
@@ -138,6 +138,11 @@ module.exports = function (inyectedStore) {
     }
 
       await mapeoManual();
+
+      console.log("listaMapeada.ken", listaMapeada.length);
+      console.log("desde", desde);
+      listaMapeada = listaMapeada.slice(desde, desde+5);
+      console.log("listaMapeada despues", listaMapeada.length);
 
     return listaMapeada;
   }

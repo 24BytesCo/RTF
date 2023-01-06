@@ -51,10 +51,17 @@ module.exports = function (inyectedStore) {
 
     const desde = Number(req.query.desdeRegistro) || 0;
     const hasta = Number(req.query.cantidadPorPagina) || 5;
+    const nombre = req.query.nombre;
 
     let listaMapeada = [];
-    let general = await store.listActivoPaginado(TABLA, desde, hasta);
+    let general = null;
 
+    if (nombre) {
+     general = await store.listActivoPaginadoNombreLike(TABLA, nombre, desde, hasta);
+
+    }else{
+      general =  await store.listActivoPaginado(TABLA, desde, hasta)
+    }
 
     async function mapeoManual(){
       for (let i=0; i<general.length; i++) 

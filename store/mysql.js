@@ -77,6 +77,18 @@ function listActivoPaginado(TABLA, desde,hasta) {
     });
   });
 }
+
+function listActivoPaginadoNombreLike(TABLA, nombre, desde,hasta) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT  *FROM ${TABLA} WHERE nombre like "%${nombre}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 function listEquiposActivosTipo(TABLA, tipoEquipo) {
   return new Promise((resolve, rejet) => {
     conectar.query(`SELECT *FROM ${TABLA} WHERE estado = 1 and tipoEquipo="${tipoEquipo}"`, (error, data) => {
@@ -199,5 +211,6 @@ module.exports = {
   listActivo,
   listEquiposActivosTipo,
   listActivoPaginado,
-  queryConteoActivo
+  queryConteoActivo,
+  listActivoPaginadoNombreLike
 };

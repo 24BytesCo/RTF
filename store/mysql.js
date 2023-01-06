@@ -101,6 +101,18 @@ function listActivoPaginadoMarcaLike(TABLA, nombre, desde,hasta) {
     });
   });
 }
+
+function listActivoPaginadoCodigoLike(TABLA, codigo, desde,hasta) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT  *FROM ${TABLA} WHERE codigo like "%${codigo}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 function listEquiposActivosTipo(TABLA, tipoEquipo) {
   return new Promise((resolve, rejet) => {
     conectar.query(`SELECT *FROM ${TABLA} WHERE estado = 1 and tipoEquipo="${tipoEquipo}"`, (error, data) => {
@@ -225,5 +237,6 @@ module.exports = {
   listActivoPaginado,
   queryConteoActivo,
   listActivoPaginadoNombreLike,
-  listActivoPaginadoMarcaLike
+  listActivoPaginadoMarcaLike,
+  listActivoPaginadoCodigoLike
 };

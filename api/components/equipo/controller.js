@@ -56,7 +56,7 @@ module.exports = function (inyectedStore) {
     let listaMapeada = [];
     let general = null;
 
-    if (nombre) {
+    if (nombre && nombre !="null") {
      general = await store.listActivoPaginadoNombreLike(TABLA, nombre, desde, hasta);
 
     }else{

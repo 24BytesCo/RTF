@@ -48,7 +48,6 @@ module.exports = function (inyectedStore) {
     return await store.insert(TABLA, equipo);
   }
   async function getAll(req) {
-
     const desde = Number(req.query.desdeRegistro) || 0;
     const hasta = Number(req.query.cantidadPorPagina) || 5;
     const nombre = req.query.nombre;
@@ -56,53 +55,65 @@ module.exports = function (inyectedStore) {
     let listaMapeada = [];
     let general = null;
 
-    if (nombre && nombre !="null") {
-     general = await store.listActivoPaginadoNombreLike(TABLA, nombre, desde, hasta);
+    if (nombre && nombre != "null") {
+      general = await store.listActivoPaginadoNombreLike(
+        TABLA,
+        nombre,
+        desde,
+        hasta
+      );
+      general.push(
+        await store.listActivoPaginadoMarcaLike(TABLA, nombre, desde, hasta)
+      );
 
-    }else{
-      general =  await store.listActivoPaginado(TABLA, desde, hasta)
+      const dataArr = new Set(general);
+
+      general = [...dataArr];
+    } else {
+      general = await store.listActivoPaginado(TABLA, desde, hasta);
     }
-
-    async function mapeoManual(){
-      for (let i=0; i<general.length; i++) 
-      {
-        const item = general[i];
-
-        const [ tipoEquipo, categoria, equipoPrincipal ] =await Promise.all([await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo), store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria),  await store.get(TABLA, item.equipoPrincipal) || null]);
+    async function mapeoManual() {
 
 
-        const equipo = 
-        {
-          id: item.id,
-          categoria:  
-          {
-            descripcion: categoria[0].descripcion,
-            codigo: categoria[0].codigo,
-          },  
-          nombre: item.nombre,
-          marca: item.marca,
-          noSerie: item.noSerie,
-          descripcion: item.descripcion,
-          fechaAdquisionEmpresa: item.fechaAdquisionEmpresa,
-          tipoEquipo:  
-          {
-            descripcion: tipoEquipo[0]?.descripcion?? null,
-            codigo: tipoEquipo[0]?.codigo?? null,
-          },
-          equipoPrincipal: 
-          {
-            id: equipoPrincipal[0]?.id?? null,
-            nombre: equipoPrincipal[0]?.nombre?? null ,
-            codigo: equipoPrincipal[0]?.codigo?? null,
-          },
-          imagenPrincipal: item.imagenPrincipal,
-          imagenArrayUrl: item.imagenArrayUrl,
-          codigo: item.codigo
+        for (let i = 0; i < general.length; i++) {
+          var item =  general[i];
+          item = Object.values(JSON.parse(JSON.stringify(item)));
+          item = item[i];
 
-        }
+          const [tipoEquipo, categoria, equipoPrincipal] = await Promise.all([
+            await store.get(TABLA_TIPO_EQUIPO, item.tipoEquipo),
+            store.get(TABLA_CARTEGORIA_EQUIPO, item.categoria),
+            (await store.get(TABLA, item.equipoPrincipal)) || null,
+          ]);
 
+          
 
-        listaMapeada.push(equipo);
+          const equipo = {
+            id: item.id,
+            categoria: {
+              descripcion: categoria[0]?.descripcion ?? null,
+              codigo: categoria[0]?.codigo ?? null,
+            },
+            nombre: item.nombre,
+            marca: item.marca,
+            noSerie: item.noSerie,
+            descripcion: item.descripcion,
+            fechaAdquisionEmpresa: item.fechaAdquisionEmpresa,
+            tipoEquipo: {
+              descripcion: tipoEquipo[0]?.descripcion ?? null,
+              codigo: tipoEquipo[0]?.codigo ?? null,
+            },
+            equipoPrincipal: {
+              id: equipoPrincipal[0]?.id ?? null,
+              nombre: equipoPrincipal[0]?.nombre ?? null,
+              codigo: equipoPrincipal[0]?.codigo ?? null,
+            },
+            imagenPrincipal: item.imagenPrincipal,
+            imagenArrayUrl: item.imagenArrayUrl,
+            codigo: item.codigo,
+          };
+
+          listaMapeada.push(equipo);
         
       }
     }
@@ -110,13 +121,13 @@ module.exports = function (inyectedStore) {
     await mapeoManual();
 
     return listaMapeada;
-
-
   }
 
   async function getAllPrincipalesActivos() {
     //Consultando el id del tipo equipo Principal
-    const tipoEquipo = await store.queryActivo(TABLA_TIPO_EQUIPO, { codigo: 'PRIN'});
+    const tipoEquipo = await store.queryActivo(TABLA_TIPO_EQUIPO, {
+      codigo: "PRIN",
+    });
     return await store.listEquiposActivosTipo(TABLA, tipoEquipo.id);
   }
 
@@ -130,12 +141,11 @@ module.exports = function (inyectedStore) {
     return await store.get(TABLA, id);
   }
 
-
   return {
     insert,
     getAll,
     getAllPrincipalesActivos,
     get,
-    getAllConteoTotalActivos
+    getAllConteoTotalActivos,
   };
 };

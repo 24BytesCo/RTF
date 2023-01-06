@@ -97,6 +97,7 @@ module.exports = function (inyectedStore) {
 
 
     async function mapeoManual() {
+      console.log("general.length = " + general.length);
       for (let i = 0; i < general.length; i++) {
         var item = general[i];
 
@@ -137,12 +138,12 @@ module.exports = function (inyectedStore) {
 
       await mapeoManual();
 
-      console.log("listaMapeada.ken", listaMapeada.length);
-      console.log("desde", desde);
-      listaMapeada = listaMapeada.slice(desde, desde+5);
-      console.log("listaMapeada despues", listaMapeada.length);
+      if (nombre == "null") {
+        return listaMapeada;
+        
+      }
 
-    return listaMapeada;
+    return listaMapeada.slice(desde, desde+5);
   }
 
   async function getAllPrincipalesActivos() {

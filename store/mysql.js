@@ -67,8 +67,9 @@ function listActivo(TABLA) {
 }
 
 function listActivoPaginado(TABLA, desde,hasta) {
+  console.log("TABLA", TABLA);
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT  *FROM ${TABLA} WHERE estado = 1  LIMIT 9999 OFFSET ${desde}`, (error, data) => {
+    conectar.query(`SELECT  *FROM ${TABLA} WHERE estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
       if (error) {
         return rejet(error);
       } else {

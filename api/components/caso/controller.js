@@ -18,7 +18,6 @@ module.exports = function (inyectedStore) {
     }
 
     var caso = {
-      id: nanoid(),
       tecnicoAsignado: null,
       equipoRelacionado: body.equipoRelacionado,
       usuarioReporta: body.usuarioReporta,

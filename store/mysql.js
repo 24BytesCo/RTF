@@ -183,6 +183,21 @@ function update(TABLA, data) {
   });
 }
 
+function deleteInactivar(TABLA, id) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `UPDATE ${TABLA} SET estado= 0 WHERE ID = "${id}"`,
+      (error, result) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+}
+
 function query(TABLA, query) {
   return new Promise((resolve, rejet) => {
     conectar.query(`SELECT *FROM ${TABLA} WHERE ?`, query, (error, data) => {
@@ -257,4 +272,5 @@ module.exports = {
   listActivoPaginadoNombreLike,
   listActivoPaginadoMarcaLike,
   listActivoPaginadoCodigoLike,
+  deleteInactivar
 };

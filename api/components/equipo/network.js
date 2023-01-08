@@ -36,6 +36,10 @@ router.get(
 // Obtener un solo equipo
 router.get("/:id", getOne);
 
+
+// Obtener un solo equipo
+router.delete("/:id", eliminarEquipo);
+
 async function insert(req, res, next) {
   Controller.insert(req.body)
     .then((result) => {
@@ -76,12 +80,22 @@ async function totalActivos(req, res, next) {
     .catch(next);
 }
 
-//Obtener un registro de CATEGORIA EQUIPO
 async function getOne(req, res, next) {
   if (!req.params.id) {
     throw new errorRtf("Debes enviar un ID", 400);
   }
   await Controller.get(req.params.id)
+    .then((user) => {
+      response.success(req, res, user, 200);
+    })
+    .catch(next);
+}
+
+async function eliminarEquipo(req, res, next) {
+  if (!req.params.id) {
+    throw new errorRtf("Debes enviar un ID", 400);
+  }
+  await Controller.deleteInactivar(req.params.id)
     .then((user) => {
       response.success(req, res, user, 200);
     })

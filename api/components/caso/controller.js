@@ -22,7 +22,7 @@ module.exports = function (inyectedStore) {
       equipoRelacionado: body.equipoRelacionado,
       usuarioReporta: body.usuarioReporta,
       fechaCreacion: new Date(),
-      observacionInicial: body.observacionInical,
+      observacionInicial: body.observacionInicial,
       estadoCaso: null,
       estado: 1,
     };

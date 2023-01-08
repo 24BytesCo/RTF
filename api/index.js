@@ -10,6 +10,8 @@ const tipoUsuario = require("./components/tipoUsuario/network");
 const categoriaEquipo = require("./components/categoriaEquipo/network");
 const tipoEquipo = require("./components/tipoEquipo/network");
 const equipo = require("./components/equipo/network");
+const caso = require("./components/caso/network");
+
 
 const errores = require("../network/gestionErrores");
 
@@ -45,6 +47,7 @@ app.use("/api/autenticacion", auth);
 app.use("/api/tipo-usuario", tipoUsuario);
 app.use("/api/categoria-equipo", categoriaEquipo);
 app.use("/api/tipo-equipo", tipoEquipo);
+app.use("/api/caso", caso);
 
 const swaggerDoc = require("./swagger.json");
 

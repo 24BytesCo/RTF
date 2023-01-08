@@ -37,7 +37,7 @@ router.get(
 router.get("/:id", getOne);
 
 
-// Obtener un solo equipo
+// Inactivar un solo equipo
 router.delete("/:id", eliminarEquipo);
 
 async function insert(req, res, next) {

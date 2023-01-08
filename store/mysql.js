@@ -241,6 +241,22 @@ function queryActivo(TABLA, query) {
   });
 }
 
+function queryActivoCasoEstadoCasoDiferenteDe(codigoEstado) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `SELECT *FROM caso ca inner join estadosCaso ec on ca.estadoCaso = ec.id WHERE ec.codigo <> "${codigoEstado}" and ca.estado = 1 and ec.estado = 1`,
+     
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data[0] || null);
+        }
+      }
+    );
+  });
+}
+
 function queryConteoActivo(TABLA) {
   return new Promise((resolve, rejet) => {
     conectar.query(
@@ -272,5 +288,6 @@ module.exports = {
   listActivoPaginadoNombreLike,
   listActivoPaginadoMarcaLike,
   listActivoPaginadoCodigoLike,
-  deleteInactivar
+  deleteInactivar,
+  queryActivoCasoEstadoCasoDiferenteDe
 };

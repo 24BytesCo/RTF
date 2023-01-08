@@ -53,6 +53,22 @@ function decodificandoCabecera(req) {
 
   const tokenValido = verificandoToken(token);
 
+  console.log("tokenValido", tokenValido);
+
+  if (!tokenValido){
+    throw new errorRtf(
+      "Ha ocurrido un problema con la autorización | NT03",
+      412
+    );
+  }
+
+  if (new Date(tokenValido.ex) < new Date()) {
+    throw new errorRtf(
+      "El token ha expirado",
+      412
+    );
+  }
+
   return (req.user = tokenValido);
 }
 

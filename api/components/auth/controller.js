@@ -12,7 +12,6 @@ module.exports = function (inyectedStore) {
   async function login(usuario, contrasenia) {
     const dataAth = await store.query(TABLA, { usuario: usuario });
 
-
     if (!dataAth) {
       throw new errorRtf("Datos de logueo inválidos", 401);
     }
@@ -31,14 +30,13 @@ module.exports = function (inyectedStore) {
             id: dataUsuario.tipoUsuario,
           });
 
-
           const fechaHoy = new Date();
           function addHoursToDate(objDate, intHours) {
             var numberOfMlSeconds = objDate.getTime();
-            var addMlSeconds = (intHours ) * 60000;
+            var addMlSeconds = intHours * 60000;
             var newDateObj = new Date(numberOfMlSeconds + addMlSeconds);
             return newDateObj;
-        }
+          }
           //Generar Token
           return autenticacionJwt.ingreso({
             usuario: dataUsuario.usuario,

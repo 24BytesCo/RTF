@@ -6,8 +6,12 @@ const seguridad = require("../../../seguridad/index");
 const router = express.Router();
 
 router.post("/login", login);
-router.get("/verificar", seguridad.verificandoPermisos(''), verificar);
-router.get("/hora-servidor", seguridad.verificandoPermisos('ver-hora-server'), horaServidor);
+router.get("/verificar", seguridad.verificandoPermisos(""), verificar);
+router.get(
+  "/hora-servidor",
+  seguridad.verificandoPermisos("ver-hora-server"),
+  horaServidor
+);
 
 async function login(req, res) {
   Controller.login(req.body.usuario, req.body.contrasenia)
@@ -31,6 +35,6 @@ async function verificar(req, res) {
 
 function horaServidor(req, res) {
   response.success(req, res, new Date(), 200);
-}  
+}
 
 module.exports = router;

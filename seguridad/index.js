@@ -61,9 +61,6 @@ function verificandoPermisos(action) {
     const usuarioLogueado = req.body.id;
     const horaActual = new Date();
 
-
-
-
     switch (action) {
       case "update-usuario":
         validando.datosLogueado(req, usuarioLogueado);
@@ -71,19 +68,17 @@ function verificandoPermisos(action) {
         next();
 
         break;
-      case "ver-hora-server":  
-      
-      decodificandoCabecera(req);
+      case "ver-hora-server":
+        decodificandoCabecera(req);
 
-      next();
+        next();
 
-      case "verificar-token":  
-      
-      decodificandoCabecera(req);
+      case "verificar-token":
+        decodificandoCabecera(req);
 
-      next();
+        next();
 
-      break;
+        break;
 
       default:
         next();
@@ -91,11 +86,11 @@ function verificandoPermisos(action) {
   }
 
   return middleware;
-};
+}
 
 module.exports = {
   ingreso,
   validando,
   decodificandoCabecera,
-  verificandoPermisos
+  verificandoPermisos,
 };

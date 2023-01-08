@@ -66,63 +66,78 @@ function listActivo(TABLA) {
   });
 }
 
-function listActivoPaginado(TABLA, desde,hasta) {
+function listActivoPaginado(TABLA, desde, hasta) {
   console.log("TABLA", TABLA);
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT  *FROM ${TABLA} WHERE estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
-      if (error) {
-        return rejet(error);
-      } else {
-        resolve(data);
+    conectar.query(
+      `SELECT  *FROM ${TABLA} WHERE estado = 1  LIMIT ${hasta} OFFSET ${desde}`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data);
+        }
       }
-    });
+    );
   });
 }
 
-function listActivoPaginadoNombreLike(TABLA, nombre, desde,hasta) {
+function listActivoPaginadoNombreLike(TABLA, nombre, desde, hasta) {
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT  *FROM ${TABLA} WHERE nombre like "%${nombre}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
-      if (error) {
-        return rejet(error);
-      } else {
-        resolve(data);
+    conectar.query(
+      `SELECT  *FROM ${TABLA} WHERE nombre like "%${nombre}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data);
+        }
       }
-    });
+    );
   });
 }
 
-function listActivoPaginadoMarcaLike(TABLA, nombre, desde,hasta) {
+function listActivoPaginadoMarcaLike(TABLA, nombre, desde, hasta) {
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT  *FROM ${TABLA} WHERE marca like "%${nombre}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
-      if (error) {
-        return rejet(error);
-      } else {
-        resolve(data);
+    conectar.query(
+      `SELECT  *FROM ${TABLA} WHERE marca like "%${nombre}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data);
+        }
       }
-    });
+    );
   });
 }
 
-function listActivoPaginadoCodigoLike(TABLA, codigo, desde,hasta) {
+function listActivoPaginadoCodigoLike(TABLA, codigo, desde, hasta) {
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT  *FROM ${TABLA} WHERE codigo like "%${codigo}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`, (error, data) => {
-      if (error) {
-        return rejet(error);
-      } else {
-        resolve(data);
+    conectar.query(
+      `SELECT  *FROM ${TABLA} WHERE codigo like "%${codigo}%" and estado = 1  LIMIT ${hasta} OFFSET ${desde}`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data);
+        }
       }
-    });
+    );
   });
 }
 function listEquiposActivosTipo(TABLA, tipoEquipo) {
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT *FROM ${TABLA} WHERE estado = 1 and tipoEquipo="${tipoEquipo}"`, (error, data) => {
-      if (error) {
-        return rejet(error);
-      } else {
-        resolve(data);
+    conectar.query(
+      `SELECT *FROM ${TABLA} WHERE estado = 1 and tipoEquipo="${tipoEquipo}"`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data);
+        }
       }
-    });
+    );
   });
 }
 function get(TABLA, id) {
@@ -155,7 +170,7 @@ function insert(TABLA, data) {
 function update(TABLA, data) {
   return new Promise((resolve, rejet) => {
     conectar.query(
-      `INSERT INTO ${TABLA} SET ? WHERE ID = ?`,
+      `UPDATE ${TABLA} SET ? WHERE ID = ?`,
       [data, data.id],
       (error, result) => {
         if (error) {
@@ -182,16 +197,18 @@ function query(TABLA, query) {
 
 function queryEquipoTipoEquipoInner(TABLA, tablaDos) {
   return new Promise((resolve, rejet) => {
-    conectar.query(`SELECT *FROM ${TABLA} tb INNER JOIN tipoEquipo te on te.id = tb.tipoEquipo WHERE tb.estado = 1` , (error, data) => {
-      if (error) {
-        return rejet(error);
-      } else {
-        resolve(data || null);
+    conectar.query(
+      `SELECT *FROM ${TABLA} tb INNER JOIN tipoEquipo te on te.id = tb.tipoEquipo WHERE tb.estado = 1`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data || null);
+        }
       }
-    });
+    );
   });
 }
-
 
 function queryActivo(TABLA, query) {
   return new Promise((resolve, rejet) => {
@@ -213,7 +230,7 @@ function queryConteoActivo(TABLA) {
   return new Promise((resolve, rejet) => {
     conectar.query(
       `SELECT COUNT(id) FROM ${TABLA} WHERE  estado = 1`,
-      
+
       (error, data) => {
         if (error) {
           return rejet(error);
@@ -239,5 +256,5 @@ module.exports = {
   queryConteoActivo,
   listActivoPaginadoNombreLike,
   listActivoPaginadoMarcaLike,
-  listActivoPaginadoCodigoLike
+  listActivoPaginadoCodigoLike,
 };

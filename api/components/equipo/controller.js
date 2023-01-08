@@ -47,6 +47,31 @@ module.exports = function (inyectedStore) {
 
     return await store.insert(TABLA, equipo);
   }
+
+  async function update(body) {
+    if (Object.entries(body).length == 0) {
+      throw new errorRtf("Debes enviar un Body", 400);
+    }
+
+    const equipo = {
+      id: body.id,
+      categoria: body.categoria,
+      nombre: body.nombre,
+      marca: body.marca,
+      noSerie: body.noSerie,
+      descripcion: body.descripcion,
+      fechaAdquisionEmpresa: body.fechaAdquisionEmpresa,
+      imagenArrayUrl: body.imagenArrayUrl,
+      modelo: body.modelo,
+      codigo: body.codigo,
+      tipoEquipo: body.tipoEquipo,
+      equipoPrincipal: body.equipoPrincipal,
+      estado: 1,
+    };
+
+    return await store.update(TABLA, equipo);
+  }
+
   async function getAll(req) {
     const desde = Number(req.query.desdeRegistro) || 0;
     const hasta = Number(req.query.cantidadPorPagina) || 5;
@@ -55,36 +80,21 @@ module.exports = function (inyectedStore) {
     let listaMapeada = [];
 
     if (nombre && nombre != "null") {
-
-     var [general, genDos, genTres] =  await Promise.all([await store.listActivoPaginadoNombreLike(
-        TABLA,
-        nombre,
-        0,
-        hasta
-      ), await store.listActivoPaginadoMarcaLike(
-        TABLA,
-        nombre,
-        0,
-        hasta
-      ), await store.listActivoPaginadoCodigoLike(
-        TABLA,
-        nombre,
-        0,
-        hasta
-      ) ]);
+      var [general, genDos, genTres] = await Promise.all([
+        await store.listActivoPaginadoNombreLike(TABLA, nombre, 0, hasta),
+        await store.listActivoPaginadoMarcaLike(TABLA, nombre, 0, hasta),
+        await store.listActivoPaginadoCodigoLike(TABLA, nombre, 0, hasta),
+      ]);
 
       for (let index = 0; index < genDos.length; index++) {
         const element = genDos[index];
         general.push(element);
       }
 
-
       for (let index = 0; index < genTres.length; index++) {
         const element = genTres[index];
         general.push(element);
       }
-
-      
 
       const dataArr = new Set(general);
 
@@ -94,7 +104,6 @@ module.exports = function (inyectedStore) {
     } else {
       general = await store.listActivoPaginado(TABLA, desde, hasta);
     }
-
 
     async function mapeoManual() {
       console.log("general.length = " + general.length);
@@ -136,14 +145,13 @@ module.exports = function (inyectedStore) {
       }
     }
 
-      await mapeoManual();
+    await mapeoManual();
 
-      if (nombre == "null") {
-        return listaMapeada;
-        
-      }
+    if (nombre == "null") {
+      return listaMapeada;
+    }
 
-    return listaMapeada.slice(desde, desde+5);
+    return listaMapeada.slice(desde, desde + 5);
   }
 
   async function getAllPrincipalesActivos() {
@@ -170,5 +178,6 @@ module.exports = function (inyectedStore) {
     getAllPrincipalesActivos,
     get,
     getAllConteoTotalActivos,
+    update
   };
 };

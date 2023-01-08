@@ -34,7 +34,7 @@ module.exports = function (inyectedStore) {
     ]);
 
     //Validando si ya existe un caso con el código de estado diferente de SOLUCIONADO (SOL)
-    const casoBD = await store.queryActivoCasoEstadoCasoDiferenteDe("SOL");
+    const casoBD = await store.queryActivoCasoEstadoCasoDiferenteDe(caso.equipoRelacionado, "SOL");
 
     if(casoBD){
       console.log("casoBD", casoBD);

@@ -129,9 +129,15 @@ module.exports = function (inyectedStore) {
     return store.get(TABLA, id);
   }
 
+  async function getAllConteoTotalActivos() {
+    //Consultando el id del tipo equipo Principal
+    return await store.queryConteoActivoNumeroCaso(TABLA);
+  }
+
   return {
     insert,
     getAll,
     get,
+    getAllConteoTotalActivos
   };
 };

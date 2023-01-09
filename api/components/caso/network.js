@@ -13,6 +13,15 @@ router.post("/", seguridad.verificandoPermisos("verificar-token"), insert);
 //Obtebiendo todos los casos
 router.get("/", seguridad.verificandoPermisos("verificar-token"), getAll);
 
+
+// Obtener lista de equipos activos
+router.get(
+  "/total-activos",
+  seguridad.verificandoPermisos("verificar-token"),
+  totalActivos
+);
+
+
 // Obtener un solo caso
 router.get("/:id", seguridad.verificandoPermisos("verificar-token"), getOne);
 
@@ -41,6 +50,16 @@ function getOne(req, res, next) {
   Controller.get(req.params.id)
     .then((user) => {
       response.success(req, res, user, 200);
+    })
+    .catch(next);
+}
+
+async function totalActivos(req, res, next) {
+  console.log("");
+  console.log("1");
+  Controller.getAllConteoTotalActivos()
+    .then((result) => {
+      response.success(req, res, result, 200);
     })
     .catch(next);
 }

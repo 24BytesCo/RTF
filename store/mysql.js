@@ -273,6 +273,23 @@ function queryConteoActivo(TABLA) {
   });
 }
 
+function queryConteoActivoNumeroCaso(TABLA) {
+  console.log("Entramos");
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `SELECT COUNT(numeroCaso) FROM ${TABLA} WHERE  estado = 1`,
+
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data[0] || null);
+        }
+      }
+    );
+  });
+}
+
 module.exports = {
   list,
   get,
@@ -289,5 +306,6 @@ module.exports = {
   listActivoPaginadoMarcaLike,
   listActivoPaginadoCodigoLike,
   deleteInactivar,
-  queryActivoCasoEstadoCasoDiferenteDe
+  queryActivoCasoEstadoCasoDiferenteDe,
+  queryConteoActivoNumeroCaso
 };

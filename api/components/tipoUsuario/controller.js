@@ -39,8 +39,13 @@ module.exports = function (inyectedStore) {
     return await store.list(TABLA);
   }
 
+  function get(id) {
+    return store.get(TABLA, id);
+  }
+
   return {
     insert,
     getAll,
+    get
   };
 };

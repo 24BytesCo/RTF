@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const errorRtf = require("../utils/error");
+const response = require("../network/response");
 
 const secreto = config.jwt.secreto;
 

@@ -99,20 +99,11 @@ module.exports = function (inyectedStore) {
       tecnicoAsignado = JSON.parse(JSON.stringify(tecnicoAsignado))[0];
       estadoCaso = JSON.parse(JSON.stringify(estadoCaso))[0];
 
-      console.log("");
-      console.log("");
-      console.log("");
-      console.log("");
-      console.log("");
-      console.log("");
-      console.log("usuarioReporta", usuarioReporta);
-
-
-
       const casoRetorno = 
       {
         numeroCaso: element.numeroCaso,
         estadoCasoCode: estadoCaso.codigo,
+        estadoCasoDescripcion: estadoCaso.descripcion,
         tecnicoAsignadoNombreCompleto: !tecnicoAsignado ? null: (tecnicoAsignado.primerNombre + " " + tecnicoAsignado.segundoNombre + " " + tecnicoAsignado.primerApellido + " " + tecnicoAsignado.segundoApellido).replace("  ", " ").replace("null", "").replace("  ", " "),
         tecnicoAsignadoId : !tecnicoAsignado ? null : tecnicoAsignado.id,
         usuarioReportaNombreCompleto: (usuarioReporta.primerNombre + " " + usuarioReporta.segundoNombre + " " + usuarioReporta.primerApellido + " " + usuarioReporta.segundoApellido).replace("  ", " ").replace("null", "").replace("  ", " "),

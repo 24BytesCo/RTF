@@ -155,6 +155,21 @@ function get(TABLA, id) {
   });
 }
 
+function getConNumeroDeCaso(TABLA, numeroCaso) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `SELECT *FROM ${TABLA} WHERE numeroCaso = "${numeroCaso}"`,
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data[0]);
+        }
+      }
+    );
+  });
+}
+
 function insert(TABLA, data) {
   return new Promise((resolve, rejet) => {
     conectar.query(`INSERT INTO ${TABLA} SET ?`, data, (error, result) => {
@@ -307,5 +322,6 @@ module.exports = {
   listActivoPaginadoCodigoLike,
   deleteInactivar,
   queryActivoCasoEstadoCasoDiferenteDe,
-  queryConteoActivoNumeroCaso
+  queryConteoActivoNumeroCaso,
+  getConNumeroDeCaso
 };

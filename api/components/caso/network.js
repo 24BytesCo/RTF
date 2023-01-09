@@ -47,7 +47,7 @@ function getOne(req, res, next) {
   if (!req.params.id) {
     throw new errorRtf("Debes enviar un ID", 400);
   }
-  Controller.get(req.params.id)
+  Controller.getOne(req.params.id)
     .then((user) => {
       response.success(req, res, user, 200);
     })
@@ -55,8 +55,7 @@ function getOne(req, res, next) {
 }
 
 async function totalActivos(req, res, next) {
-  console.log("");
-  console.log("1");
+
   Controller.getAllConteoTotalActivos()
     .then((result) => {
       response.success(req, res, result, 200);

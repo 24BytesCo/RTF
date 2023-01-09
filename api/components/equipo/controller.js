@@ -172,6 +172,8 @@ module.exports = function (inyectedStore) {
     return await store.get(TABLA, id);
   }
 
+
+
   //Función para consultar un registro
   async function deleteInactivar(id) {
     return await store.deleteInactivar(TABLA, id);

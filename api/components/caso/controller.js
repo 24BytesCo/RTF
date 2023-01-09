@@ -68,8 +68,70 @@ module.exports = function (inyectedStore) {
     return await store.insert(TABLA, caso);
   }
 
-  async function getAll() {
-    return await store.listActivo(TABLA);
+  async function getAll(req) {
+    const desde = Number(req.query.desdeRegistro) || 0;
+    const hasta = Number(req.query.cantidadPorPagina) || 5;
+    const nombre = req.query.nombre;
+
+    let listaMapeada = [];
+    
+    var casosBd = await store.listActivo(TABLA);
+    
+    console.log("casosBd", casosBd);
+
+    for (let index = 0; index < casosBd.length; index++) {
+      var element = casosBd[index];
+
+      console.log("element antes", element);
+
+      element = JSON.parse(JSON.stringify(element));
+      console.log("element después", element);
+
+      var [equipoRelacionado, usuarioReporta, tecnicoAsignado, estadoCaso] = await Promise.all([
+        await store.get(TABLA_EQUIPO, element.equipoRelacionado),
+        store.get(TABLA_USUARIO, element.usuarioReporta),
+        await store.get(TABLA_USUARIO, element.tecnicoAsignado),
+        await store.get(TABLA_ESTADO_CASO, element.estadoCaso),
+      ]);
+
+      equipoRelacionado = JSON.parse(JSON.stringify(equipoRelacionado))[0];
+      usuarioReporta = JSON.parse(JSON.stringify(usuarioReporta))[0];
+      tecnicoAsignado = JSON.parse(JSON.stringify(tecnicoAsignado))[0];
+      estadoCaso = JSON.parse(JSON.stringify(estadoCaso))[0];
+
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("");
+      console.log("usuarioReporta", usuarioReporta);
+
+
+
+      const casoRetorno = 
+      {
+        numeroCaso: element.numeroCaso,
+        estadoCasoCode: estadoCaso.codigo,
+        tecnicoAsignadoNombreCompleto: !tecnicoAsignado ? null: (tecnicoAsignado.primerNombre + " " + tecnicoAsignado.segundoNombre + " " + tecnicoAsignado.primerApellido + " " + tecnicoAsignado.segundoApellido).replace("  ", " ").replace("null", "").replace("  ", " "),
+        tecnicoAsignadoId : !tecnicoAsignado ? null : tecnicoAsignado.id,
+        usuarioReportaNombreCompleto: (usuarioReporta.primerNombre + " " + usuarioReporta.segundoNombre + " " + usuarioReporta.primerApellido + " " + usuarioReporta.segundoApellido).replace("  ", " ").replace("null", "").replace("  ", " "),
+        usuarioReportaId : usuarioReporta.id,
+        equipoRelacionado: equipoRelacionado.nombre + " | " + equipoRelacionado.codigo,
+        fechaCreacionString: new Date(element.fechaCreacion).toLocaleDateString(),
+        observacionInicial: element.observacionInicial
+      }
+
+
+      listaMapeada.push(casoRetorno);
+
+
+      
+    }
+
+
+
+    return listaMapeada;
   }
   //Función para consultar un registro
   function get(id) {

@@ -26,7 +26,7 @@ async function insert(req, res, next) {
 }
 
 async function getAll(req, res, next) {
-  Controller.getAll()
+  Controller.getAll(req)
     .then((result) => {
       response.success(req, res, result, 200);
     })

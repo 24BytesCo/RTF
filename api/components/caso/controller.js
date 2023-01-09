@@ -214,6 +214,7 @@ module.exports = function (inyectedStore) {
         equipoRelacionado.nombre + " | " + equipoRelacionado.codigo,
       fechaCreacionString: new Date(element.fechaCreacion).toLocaleDateString(),
       observacionInicial: element.observacionInicial,
+      imagenPrincipalEquipoSeleccionado: element.imagenPrincipal
     };
 
     return casoRetorno;

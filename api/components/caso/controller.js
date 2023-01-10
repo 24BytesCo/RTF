@@ -235,6 +235,10 @@ module.exports = function (inyectedStore) {
     return await store.queryConteoActivoNumeroCaso(TABLA);
   }
 
+  async function asignarTecnico(req) {
+    return [];
+  }
+
   return {
     insert,
     getAll,
@@ -242,5 +246,6 @@ module.exports = function (inyectedStore) {
     getAllConteoTotalActivos,
     getConNumerocaso,
     getOne,
+    asignarTecnico
   };
 };

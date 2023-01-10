@@ -2,16 +2,17 @@ const express = require("express");
 const errorRtf = require("../../../utils/error");
 const response = require("../../../network/response");
 const Controller = require("./index");
-const seguridad = require("./secure");
+const seguridad = require("../../../seguridad/index");
+
 
 const router = express.Router();
 
 //Rutas
 router.get("/",  getAll);
-router.get("/todos-tecnicos", seguridad("verificar-token"),  getAllTecnicosActivos);
+router.get("/todos-tecnicos", seguridad.verificandoPermisos("verificar-token"),  getAllTecnicosActivos);
 router.get("/:id", getOne);
 router.post("/",  insert);
-router.put("/",  seguridad("update-usuario"), insert);
+router.put("/",  seguridad.verificandoPermisos("update-usuario"), insert);
 
 //Funciones
 

@@ -56,7 +56,7 @@ function decodificandoCabecera(req) {
 
   console.log("tokenValido", tokenValido);
 
-  if (!tokenValido){
+  if (!tokenValido) {
     throw new errorRtf(
       "Ha ocurrido un problema con la autorización | NT03",
       412
@@ -64,10 +64,7 @@ function decodificandoCabecera(req) {
   }
 
   if (new Date(tokenValido.ex) < new Date()) {
-    throw new errorRtf(
-      "El token ha expirado",
-      412
-    );
+    throw new errorRtf("El token ha expirado", 412);
   }
 
   return (req.user = tokenValido);
@@ -85,6 +82,33 @@ function verificandoPermisos(action) {
         next();
 
         break;
+      case "asignar-tecnico":
+        const usuario = decodificandoCabecera(req);
+
+        if (!usuario) {
+          throw new errorRtf(
+            "Usted no tiene permisos para realizar ésta acción.",
+            412
+          );
+        }
+
+        let tipoUsuario = usuario.tUsuario;
+
+        if (tipoUsuario == "ADMINRTF") {
+          next();
+          break;
+        }
+
+        if (tipoUsuario == "SUPERADMIN") {
+          next();
+          break;
+        }
+
+        throw new errorRtf(
+          "Usted no tiene permisos para realizar ésta acción.",
+          412
+        );
+
       case "ver-hora-server":
         decodificandoCabecera(req);
 

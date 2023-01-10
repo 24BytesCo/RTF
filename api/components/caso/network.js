@@ -9,6 +9,7 @@ const router = express.Router();
 
 //Creando un nuevo caso
 router.post("/", seguridad.verificandoPermisos("verificar-token"), insert);
+router.post("/asignar-tecnico", seguridad.verificandoPermisos("asignar-tecnico"), asignarTecnico);
 
 //Obtebiendo todos los casos
 router.get("/", seguridad.verificandoPermisos("verificar-token"), getAll);
@@ -28,6 +29,14 @@ router.get("/:id", seguridad.verificandoPermisos("verificar-token"), getOne);
 
 async function insert(req, res, next) {
   Controller.insert(req.body)
+    .then((result) => {
+      response.success(req, res, result, 200);
+    })
+    .catch(next);
+}
+
+async function asignarTecnico(req, res, next) {
+  Controller.asignarTecnico(req.body)
     .then((result) => {
       response.success(req, res, result, 200);
     })

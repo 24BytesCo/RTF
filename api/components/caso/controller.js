@@ -244,6 +244,7 @@ module.exports = function (inyectedStore) {
     var asignarTecnico = {
       idCaso: body.idCaso,
       idTecnico: body.idTecnico,
+      estadoCaso: null
     };
 
     validacionesParametrosRtf(asignarTecnico, ["idCaso", "idTecnico"]);
@@ -281,6 +282,16 @@ module.exports = function (inyectedStore) {
     if (tecnicoOcupado != null) {
       throw new errorRtf("El usuario proporcionado ya está asignado en un caso no solucionado", 400);
     }
+
+    const estadoCasoASignado = await store.queryActivo(TABLA_ESTADO_CASO, {
+      codigo: 'ASIG',
+    });
+
+    if (estadoCasoASignado == null) {
+      throw new errorRtf("El tipo caso asignado no se pudo encontrar.", 400);
+    }
+
+    asignarTecnico.estadoCaso = estadoCasoASignado.id;
 
     return await store.updateCasoAgregaTecnico(TABLA, asignarTecnico);
   }

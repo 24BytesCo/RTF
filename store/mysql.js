@@ -213,7 +213,7 @@ function update(TABLA, data) {
 function updateCasoAgregaTecnico(TABLA, data) {
   return new Promise((resolve, rejet) => {
     conectar.query(
-      `UPDATE ${TABLA} SET tecnicoAsignado = "${data.idTecnico}"  WHERE numeroCaso = ${data.idCaso}`,
+      `UPDATE ${TABLA} SET tecnicoAsignado = "${data.idTecnico}", estadoCaso = "${data.estadoCaso}"  WHERE numeroCaso = ${data.idCaso}`,
       (error, result) => {
         if (error) {
           return rejet(error);

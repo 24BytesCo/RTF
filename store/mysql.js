@@ -66,6 +66,18 @@ function listActivo(TABLA) {
   });
 }
 
+function listActivoConCodigo(TABLA, codigo) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(`SELECT ta.id as id, ta.primerNombre, ta.segundoNombre, ta.primerApellido, ta.segundoApellido from ${TABLA} ta INNER JOIN tipoUsuario tu ON ta.tipoUsuario = tu.id where ta.estado = 1 and tu.codigo = "${codigo}"`, (error, data) => {
+      if (error) {
+        return rejet(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
 function listActivoPaginado(TABLA, desde, hasta) {
   console.log("TABLA", TABLA);
   return new Promise((resolve, rejet) => {
@@ -272,6 +284,22 @@ function queryActivoCasoEstadoCasoDiferenteDe(idEquipo, codigoEstado) {
   });
 }
 
+function queryActivoCasoEstadoTecnicoCasoDiferenteDe(idUsuario, codigoEstado) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `SELECT *FROM caso ca inner join estadosCaso ec on ca.estadoCaso = ec.id WHERE ec.codigo <> "${codigoEstado}" and ca.tecnicoAsignado = "${idUsuario}" and ca.estado = 1 and ec.estado = 1`,
+     
+      (error, data) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(data[0] || null);
+        }
+      }
+    );
+  });
+}
+
 function queryConteoActivo(TABLA) {
   return new Promise((resolve, rejet) => {
     conectar.query(
@@ -323,5 +351,7 @@ module.exports = {
   deleteInactivar,
   queryActivoCasoEstadoCasoDiferenteDe,
   queryConteoActivoNumeroCaso,
-  getConNumeroDeCaso
+  getConNumeroDeCaso,
+  listActivoConCodigo,
+  queryActivoCasoEstadoTecnicoCasoDiferenteDe
 };

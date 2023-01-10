@@ -1,6 +1,8 @@
 //Para generar ids
 const { nanoid } = require("nanoid");
 const TABLE = "usuario";
+const codigoTecnico = "TEC";
+const { concatenarNombreCompleto } = require("../../../utils/general");
 const auth = require("../auth/");
 const {
   validacionesParametrosRtf,
@@ -15,6 +17,36 @@ module.exports = function (inyectedStore) {
   //Función para consultar todos los registros de una tabla
   function list() {
     return store.list(TABLE);
+  }
+
+  async function getAllTecnicosActivos() {
+    var listaRetorno = [];
+    var tecnicosBd = await store.listActivoConCodigo(TABLE, codigoTecnico);
+
+    console.log("tecnicosBd", tecnicosBd);
+
+    for (let index = 0; index < tecnicosBd.length; index++) {
+      var element = tecnicosBd[index];
+
+      element = JSON.parse(JSON.stringify(element));
+
+      //Validando que el tecnico no tenga casos en curso
+      const tecnicoOcupado =
+        await store.queryActivoCasoEstadoTecnicoCasoDiferenteDe(
+          element.id,
+          "SOL"
+        );
+
+      if (!tecnicoOcupado) {
+        const tecnicos = {
+          nombreCompletoTecnico: concatenarNombreCompleto(element),
+          id: element.id,
+        };
+        listaRetorno.push(tecnicos);
+      }
+    }
+
+    return listaRetorno;
   }
 
   //Función para consultar un registro
@@ -88,5 +120,6 @@ module.exports = function (inyectedStore) {
     list,
     get,
     insert,
+    getAllTecnicosActivos,
   };
 };

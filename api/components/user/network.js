@@ -8,6 +8,7 @@ const router = express.Router();
 
 //Rutas
 router.get("/",  getAll);
+router.get("/todos-tecnicos", seguridad("verificar-token"),  getAllTecnicosActivos);
 router.get("/:id", getOne);
 router.post("/",  insert);
 router.put("/",  seguridad("update-usuario"), insert);
@@ -22,6 +23,17 @@ function getAll(req, res, next) {
     })
     .catch(next);
 }
+
+
+//Obtener todos los registros de usuarios técnicos activos
+function getAllTecnicosActivos(req, res, next) {
+  Controller.getAllTecnicosActivos()
+    .then((todosUsuarios) => {
+      response.success(req, res, todosUsuarios, 200);
+    })
+    .catch(next);
+}
+
 
 //Obtener un registro de usuario
 function getOne(req, res, next) {

@@ -23,7 +23,6 @@ module.exports = function (inyectedStore) {
     var listaRetorno = [];
     var tecnicosBd = await store.listActivoConCodigo(TABLE, codigoTecnico);
 
-    console.log("tecnicosBd", tecnicosBd);
 
     for (let index = 0; index < tecnicosBd.length; index++) {
       var element = tecnicosBd[index];

@@ -3,6 +3,7 @@ const { nanoid } = require("nanoid");
 const TABLA = "caso";
 const TABLA_ESTADO_CASO = "estadosCaso";
 const TABLA_EQUIPO = "equipo";
+const TABLA_TIPO_USUARIO = "tipoUsuario";
 const TABLA_USUARIO = "usuario";
 const errorRtf = require("../../../utils/error");
 const {
@@ -214,7 +215,7 @@ module.exports = function (inyectedStore) {
         equipoRelacionado.nombre + " | " + equipoRelacionado.codigo,
       fechaCreacionString: new Date(element.fechaCreacion).toLocaleDateString(),
       observacionInicial: element.observacionInicial,
-      imagenPrincipalEquipoSeleccionado: equipoRelacionado.imagenPrincipal
+      imagenPrincipalEquipoSeleccionado: equipoRelacionado.imagenPrincipal,
     };
 
     return casoRetorno;
@@ -235,8 +236,53 @@ module.exports = function (inyectedStore) {
     return await store.queryConteoActivoNumeroCaso(TABLA);
   }
 
-  async function asignarTecnico(req) {
-    return [];
+  async function asignarTecnico(body) {
+    if (Object.entries(body).length == 0) {
+      throw new errorRtf("Debes enviar un Body", 400);
+    }
+
+    var asignarTecnico = {
+      idCaso: body.idCaso,
+      idTecnico: body.idTecnico,
+    };
+
+    validacionesParametrosRtf(asignarTecnico, ["idCaso", "idTecnico"]);
+
+    //Validaciones
+
+    //Validando que el usuario exista, que sea un tecnico y que no esté asignado a otro caso.
+
+    const usuarioTecnico = await store.queryActivo(TABLA_USUARIO, {
+      id: asignarTecnico.idTecnico,
+    });
+
+    if (!usuarioTecnico) {
+      throw new errorRtf("El usuario proporcionado no existe", 400);
+    }
+
+    const tipoUsuario = await store.queryActivo(TABLA_TIPO_USUARIO, {
+      id: usuarioTecnico.tipoUsuario,
+    });
+
+    console.log("tipoUsuario", tipoUsuario);
+
+    if (tipoUsuario.codigo != "TEC") {
+      throw new errorRtf("El usuario proporcionado no es un técnico", 400);
+    }
+
+    var tecnicoOcupado =
+    await store.queryActivoCasoEstadoTecnicoCasoDiferenteDe(
+      asignarTecnico.idTecnico,
+      "SOL"
+    );
+
+    console.log("tecnicoOcupado", tecnicoOcupado);
+
+    if (tecnicoOcupado != null) {
+      throw new errorRtf("El usuario proporcionado ya está asignado en un caso no solucionado", 400);
+    }
+
+    return await store.updateCasoAgregaTecnico(TABLA, asignarTecnico);
   }
 
   return {
@@ -246,6 +292,6 @@ module.exports = function (inyectedStore) {
     getAllConteoTotalActivos,
     getConNumerocaso,
     getOne,
-    asignarTecnico
+    asignarTecnico,
   };
 };

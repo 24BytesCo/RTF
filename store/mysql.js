@@ -210,6 +210,21 @@ function update(TABLA, data) {
   });
 }
 
+function updateCasoAgregaTecnico(TABLA, data) {
+  return new Promise((resolve, rejet) => {
+    conectar.query(
+      `UPDATE ${TABLA} SET tecnicoAsignado = "${data.idTecnico}"  WHERE numeroCaso = ${data.idCaso}`,
+      (error, result) => {
+        if (error) {
+          return rejet(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+}
+
 function deleteInactivar(TABLA, id) {
   return new Promise((resolve, rejet) => {
     conectar.query(
@@ -353,5 +368,6 @@ module.exports = {
   queryConteoActivoNumeroCaso,
   getConNumeroDeCaso,
   listActivoConCodigo,
-  queryActivoCasoEstadoTecnicoCasoDiferenteDe
+  queryActivoCasoEstadoTecnicoCasoDiferenteDe,
+  updateCasoAgregaTecnico
 };
